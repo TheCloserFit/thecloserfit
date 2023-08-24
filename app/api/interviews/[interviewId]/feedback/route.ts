@@ -187,7 +187,7 @@ export async function POST(
         To: user.email,
         From: env.SMTP_FROM,
         TemplateModel: {
-          type: interview.id,
+          type: interview.type,
           position: interview.position,
           date: formatDate(interview.updatedAt.toDateString()),
           interviewLink: absoluteUrl(`/interviews/${interview.id}`),
