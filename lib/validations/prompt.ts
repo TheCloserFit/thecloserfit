@@ -7,7 +7,7 @@ export const questionsRequestPromptSchema = z.object({
 })
 
 export const questionsResponsePromptSchema = z.object({
-  questions: z.array(z.string().min(1)).min(5).max(5),
+  questions: z.array(z.string().min(1)).min(4).max(4),
 })
 
 export const feedbackRequestPromptSchema = z.object({
@@ -19,8 +19,8 @@ export const feedbackRequestPromptSchema = z.object({
         answer: z.string().min(1),
       })
     )
-    .min(5)
-    .max(5),
+    .min(4)
+    .max(4),
   position: z.string().min(1),
   resume: z.string().min(1),
 })
@@ -35,6 +35,6 @@ export const feedbackResponsePromptSchema = z.object({
         weaknesses: z.array(z.string().min(1)),
       })
     )
-    .min(5)
-    .max(5),
+    .min(4)
+    .max(4),
 })
