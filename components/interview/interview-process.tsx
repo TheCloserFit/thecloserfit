@@ -100,6 +100,12 @@ InterviewProcess.Indications = function Indications({
         questions, whenever you feel ready! Behave as if you were in a real
         interview and try to answer as best as you can.
       </Balancer>
+      <div className="mt-2 flex items-center justify-center gap-2">
+        <Icons.hint className="h-6 w-6 text-blue-300" />
+        <Balancer className="text-center">
+          Remember to keep your answer concise!
+        </Balancer>
+      </div>
       <Button
         onClick={() => setShowIndications(false)}
         className="mt-4"
