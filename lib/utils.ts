@@ -35,7 +35,7 @@ export function getInterviewSubtitle(
     ? "Incomplete"
     : hasFeedback
     ? "Completed"
-    : "Waiting for review"
+    : "Waiting for feedback"
 
   return state + ", " + type + ", " + interview.position
 }

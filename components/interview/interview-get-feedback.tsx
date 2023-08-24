@@ -19,6 +19,11 @@ export function InterviewGetFeedback({
 
   const getFeedback = async () => {
     setLoading(true)
+    toast({
+      title: "Hold on...",
+      description:
+        "We're generating your feedback. It could take up to 1 minute.",
+    })
     const res = await fetch(`/api/interviews/${interviewId}/feedback`, {
       method: "POST",
     })
