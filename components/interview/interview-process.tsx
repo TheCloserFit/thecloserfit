@@ -36,8 +36,7 @@ export default function InterviewProcess({
         if (isLast) {
           toast({
             title: "Interview Finished",
-            description:
-              "Thank you for your time! An email will be sent to you shortly. Check your inbox!",
+            description: "Thank you for your time!",
           })
         }
       } catch (err) {

@@ -253,7 +253,7 @@ export async function generateFeedback(
       throw new Error(result.Message)
     }
 
-    console.error(error.response)
+    console.error("An error occurred generating feedback:", error)
 
     throw new Error(error)
   }

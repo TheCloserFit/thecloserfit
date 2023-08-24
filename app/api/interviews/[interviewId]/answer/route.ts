@@ -5,8 +5,6 @@ import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
 import { postInterviewAnswerSchema } from "@/lib/validations/interview"
 
-import { generateFeedback } from "../feedback/route"
-
 const routeContextSchema = z.object({
   params: z.object({
     interviewId: z.string(),
@@ -52,15 +50,6 @@ export async function POST(
       },
     })
 
-    const questions = await db.question.findMany({
-      where: {
-        interview: {
-          userId: sessionUser.id,
-          id: params.interviewId,
-        },
-      },
-    })
-
     const interview = await db.interview.findUnique({
       where: {
         id: params.interviewId,
@@ -68,12 +57,6 @@ export async function POST(
     })
 
     if (!interview) return new Response(null, { status: 404 })
-
-    if (questions.every((question) => !!question.answerAudio)) {
-      console.info("Starting generate feedback")
-      generateFeedback(params.interviewId, sessionUser.id, questions, interview)
-      console.info("Passed generate feedback")
-    }
 
     return new Response(JSON.stringify(updatedQuestion), { status: 200 })
   } catch (error) {

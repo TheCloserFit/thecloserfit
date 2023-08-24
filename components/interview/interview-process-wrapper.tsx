@@ -46,7 +46,7 @@ export default function InterviewProcessWrapper({
       }
 
       if (isLast) {
-        router.push("/interviews")
+        router.push("/interviews/" + interview.id)
         return
       }
 
