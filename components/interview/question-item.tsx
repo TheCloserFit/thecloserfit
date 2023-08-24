@@ -27,7 +27,7 @@ export function QuestionItem({ question }: QuestionItemProps) {
           <Balancer className="self-start text-left text-base font-semibold sm:text-lg">
             {question.question}
           </Balancer>
-          {!!question.answerAudio && (
+          {!!question.transcribedAnswer && (
             <CollapsibleTrigger asChild>
               <Button
                 variant="ghost"

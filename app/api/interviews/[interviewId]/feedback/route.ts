@@ -1,4 +1,3 @@
-import { Interview, Question } from "@prisma/client"
 import S3 from "aws-sdk/clients/s3"
 import FormData from "form-data"
 import fetch from "node-fetch"
@@ -55,6 +54,9 @@ export async function POST(
           userId: sessionUser.id,
           id: params.interviewId,
         },
+        answerAudio: {
+          not: null,
+        },
       },
     })
 
@@ -66,16 +68,173 @@ export async function POST(
 
     if (!interview) return new Response(null, { status: 404 })
 
-    if (questions.some((question) => !question.answerAudio)) {
-      return new Response(null, { status: 422 })
-    }
+    console.info("Generating feedback for interview:", interview.id)
 
-    await generateFeedback(
-      params.interviewId,
-      sessionUser.id,
-      questions,
-      interview
-    )
+    await db.interview.update({
+      where: {
+        id: interview.id,
+      },
+      data: {
+        generatingFeedback: true,
+      },
+    })
+
+    const user = await db.user.findUnique({
+      where: {
+        id: sessionUser.id,
+      },
+      select: {
+        resume: true,
+        email: true,
+      },
+    })
+
+    if (!user) throw new Error("User not found")
+    if (!user.email) throw new Error("User does not have an email")
+    if (!user.resume) throw new Error("User does not have a resume")
+
+    try {
+      const mappedQuestions = await Promise.all(
+        questions.map(async (question) => {
+          if (!question.answerAudio) {
+            throw new Error("Question does not have an answer")
+          }
+
+          let transcribedAnswer = question.transcribedAnswer
+          if (!transcribedAnswer) {
+            transcribedAnswer = await getAnswerTranscription(
+              question.answerAudio,
+              question.id
+            )
+          }
+
+          return {
+            questionId: question.id,
+            question: question.question,
+            answer: transcribedAnswer,
+          }
+        })
+      )
+
+      const promptRequest: z.infer<typeof feedbackRequestPromptSchema> = {
+        resume: user.resume,
+        questionsAnswers: mappedQuestions,
+        position: interview.position,
+      }
+
+      const parsedPromptRequest =
+        feedbackRequestPromptSchema.parse(promptRequest)
+
+      console.info("Sending feedback prompt to openai")
+
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: feedbackPrompt,
+          },
+          {
+            role: "user",
+            content: JSON.stringify(parsedPromptRequest),
+          },
+        ],
+        temperature: 0.99,
+      })
+
+      console.info(
+        "Feedback prompt generated.",
+        response.data.choices[0].message?.content
+      )
+
+      const message = response.data.choices[0].message?.content
+
+      if (!message)
+        throw new Error(
+          "OpenAI did not return a message for the feedback prompt"
+        )
+
+      const messageObject = JSON.parse(message)
+
+      console.info("Recieved openai response", messageObject)
+
+      const parsedMessage = feedbackResponsePromptSchema.parse(messageObject)
+
+      await db.interview.update({
+        where: {
+          id: interview.id,
+        },
+        data: {
+          feedback: parsedMessage.feedback,
+          questions: {
+            update: parsedMessage.questionsFeedback.map((questionFeedback) => ({
+              where: {
+                id: questionFeedback.questionId,
+              },
+              data: {
+                strengths: questionFeedback.strengths,
+                weaknesses: questionFeedback.weaknesses,
+              },
+            })),
+          },
+          generatingFeedback: false,
+        },
+      })
+
+      console.info("Feedback generated")
+
+      const result = await postmarkClient.sendEmailWithTemplate({
+        TemplateId: parseInt(env.POSTMARK_FEEDBACK_SUCCESS_TEMPLATE),
+        To: user.email,
+        From: env.SMTP_FROM,
+        TemplateModel: {
+          type: interview.id,
+          position: interview.position,
+          date: formatDate(interview.updatedAt.toDateString()),
+          interviewLink: absoluteUrl(`/interviews/${interview.id}`),
+          product_name: siteConfig.name,
+          contact_email: siteConfig.email,
+        },
+      })
+
+      console.info("Feedback email sent")
+
+      if (result.ErrorCode) {
+        throw new Error(result.Message)
+      }
+    } catch (error) {
+      await db.interview.update({
+        where: {
+          id: interview.id,
+        },
+        data: {
+          generatingFeedback: false,
+        },
+      })
+
+      const result = await postmarkClient.sendEmailWithTemplate({
+        TemplateId: parseInt(env.POSTMARK_FEEDBACK_ERROR_TEMPLATE),
+        To: user.email,
+        From: env.SMTP_FROM,
+        TemplateModel: {
+          type: interview.type,
+          position: interview.position,
+          date: formatDate(interview.updatedAt.toDateString()),
+          interviewLink: absoluteUrl(`/interviews/${interview.id}`),
+          product_name: siteConfig.name,
+          contact_email: siteConfig.email,
+        },
+      })
+
+      if (result.ErrorCode) {
+        console.error(result)
+        throw new Error(result.Message)
+      }
+
+      console.error(error.response)
+
+      throw new Error(error)
+    }
 
     return new Response(null, { status: 200 })
   } catch (error) {
@@ -85,177 +244,6 @@ export async function POST(
     }
 
     return new Response(null, { status: error.status || 500 })
-  }
-}
-
-export async function generateFeedback(
-  interviewId: string,
-  userId: string,
-  questions: Question[],
-  interview: Interview
-) {
-  console.info("Generating feedback")
-  await db.interview.update({
-    where: {
-      id: interviewId,
-    },
-    data: {
-      generatingFeedback: true,
-    },
-  })
-
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      resume: true,
-      email: true,
-    },
-  })
-
-  if (!user) throw new Error("User not found")
-  if (!user.email) throw new Error("User does not have an email")
-
-  try {
-    if (!user.resume) throw new Error("User does not have a resume")
-
-    const mappedQuestions = await Promise.all(
-      questions.map(async (question) => {
-        if (!question.answerAudio) {
-          throw new Error("Question does not have an answer")
-        }
-
-        let transcribedAnswer = question.transcribedAnswer
-        if (!transcribedAnswer) {
-          transcribedAnswer = await getAnswerTranscription(
-            question.answerAudio,
-            question.id
-          )
-        }
-
-        return {
-          questionId: question.id,
-          question: question.question,
-          answer: transcribedAnswer,
-        }
-      })
-    )
-
-    const promptRequest: z.infer<typeof feedbackRequestPromptSchema> = {
-      resume: user.resume,
-      questionsAnswers: mappedQuestions,
-      position: interview.position,
-    }
-
-    const parsedPromptRequest = feedbackRequestPromptSchema.parse(promptRequest)
-
-    console.info("Sending feedback prompt to openai")
-
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: feedbackPrompt,
-        },
-        {
-          role: "user",
-          content: JSON.stringify(parsedPromptRequest),
-        },
-      ],
-      temperature: 0.99,
-    })
-
-    console.info(
-      "Feedback prompt generated.",
-      response.data.choices[0].message?.content
-    )
-
-    const message = response.data.choices[0].message?.content
-
-    if (!message)
-      throw new Error("OpenAI did not return a message for the feedback prompt")
-
-    const messageObject = JSON.parse(message)
-
-    console.info("Recieved openai response", messageObject)
-
-    const parsedMessage = feedbackResponsePromptSchema.parse(messageObject)
-
-    await db.interview.update({
-      where: {
-        id: interviewId,
-      },
-      data: {
-        feedback: parsedMessage.feedback,
-        questions: {
-          update: parsedMessage.questionsFeedback.map((questionFeedback) => ({
-            where: {
-              id: questionFeedback.questionId,
-            },
-            data: {
-              strengths: questionFeedback.strengths,
-              weaknesses: questionFeedback.weaknesses,
-            },
-          })),
-        },
-        generatingFeedback: false,
-      },
-    })
-
-    console.info("Feedback generated")
-
-    const result = await postmarkClient.sendEmailWithTemplate({
-      TemplateId: parseInt(env.POSTMARK_FEEDBACK_SUCCESS_TEMPLATE),
-      To: user.email,
-      From: env.SMTP_FROM,
-      TemplateModel: {
-        type: interview.id,
-        position: interview.position,
-        date: formatDate(interview.updatedAt.toDateString()),
-        interviewLink: absoluteUrl(`/interviews/${interview.id}`),
-        product_name: siteConfig.name,
-        contact_email: siteConfig.email,
-      },
-    })
-
-    console.info("Feedback email sent")
-
-    if (result.ErrorCode) {
-      throw new Error(result.Message)
-    }
-  } catch (error) {
-    await db.interview.update({
-      where: {
-        id: interviewId,
-      },
-      data: {
-        generatingFeedback: false,
-      },
-    })
-
-    const result = await postmarkClient.sendEmailWithTemplate({
-      TemplateId: parseInt(env.POSTMARK_FEEDBACK_ERROR_TEMPLATE),
-      To: user.email,
-      From: env.SMTP_FROM,
-      TemplateModel: {
-        type: interview.type,
-        position: interview.position,
-        date: formatDate(interview.updatedAt.toDateString()),
-        interviewLink: absoluteUrl(`/interviews/${interview.id}`),
-        product_name: siteConfig.name,
-        contact_email: siteConfig.email,
-      },
-    })
-    if (result.ErrorCode) {
-      console.error(result)
-      throw new Error(result.Message)
-    }
-
-    console.error("An error occurred generating feedback:", error)
-
-    throw new Error(error)
   }
 }
 
