@@ -28,7 +28,11 @@ export default async function SectionPage({ params }: InterviewPageProps) {
       userId: user.id,
     },
     include: {
-      questions: true,
+      questions: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   })
 
@@ -59,7 +63,7 @@ export default async function SectionPage({ params }: InterviewPageProps) {
         text={getInterviewSubtitle(interview)}
         className="mt-0"
       >
-        {!interview.feedback && !interview.generatingFeedback && (
+        {!interview.feedback && (
           <div className="flex flex-row-reverse justify-start gap-2 sm:flex-row sm:justify-end">
             <InterviewGetFeedback interviewId={interview.id}>
               Get feedback

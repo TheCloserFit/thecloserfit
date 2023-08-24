@@ -24,7 +24,6 @@ model Interview {
   position           String
   type               InterviewType
   feedback           String?
-  generatingFeedback Boolean       @default(false)
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")

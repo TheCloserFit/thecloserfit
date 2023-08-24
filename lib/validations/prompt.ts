@@ -31,7 +31,6 @@ export const feedbackResponsePromptSchema = z.object({
     .array(
       z.object({
         questionId: z.string().min(1),
-        question: z.string().min(1),
         strengths: z.array(z.string().min(1)),
         weaknesses: z.array(z.string().min(1)),
       })

@@ -30,6 +30,8 @@ export async function POST(
   _req: Request,
   context: z.infer<typeof routeContextSchema>
 ) {
+  console.time("feedback")
+
   try {
     const sessionUser = await getCurrentUser()
 
@@ -70,15 +72,6 @@ export async function POST(
 
     console.info("Generating feedback for interview:", interview.id)
 
-    await db.interview.update({
-      where: {
-        id: interview.id,
-      },
-      data: {
-        generatingFeedback: true,
-      },
-    })
-
     const user = await db.user.findUnique({
       where: {
         id: sessionUser.id,
@@ -94,6 +87,8 @@ export async function POST(
     if (!user.resume) throw new Error("User does not have a resume")
 
     try {
+      console.info("Transcribing answers")
+      console.timeLog("feedback")
       const mappedQuestions = await Promise.all(
         questions.map(async (question) => {
           if (!question.answerAudio) {
@@ -115,6 +110,8 @@ export async function POST(
           }
         })
       )
+      console.info("Transcribed answers")
+      console.timeLog("feedback")
 
       const promptRequest: z.infer<typeof feedbackRequestPromptSchema> = {
         resume: user.resume,
@@ -126,6 +123,7 @@ export async function POST(
         feedbackRequestPromptSchema.parse(promptRequest)
 
       console.info("Sending feedback prompt to openai")
+      console.timeLog("feedback")
 
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
@@ -142,10 +140,8 @@ export async function POST(
         temperature: 0.99,
       })
 
-      console.info(
-        "Feedback prompt generated.",
-        response.data.choices[0].message?.content
-      )
+      console.info("Generated feedback")
+      console.timeLog("feedback")
 
       const message = response.data.choices[0].message?.content
 
@@ -156,9 +152,12 @@ export async function POST(
 
       const messageObject = JSON.parse(message)
 
-      console.info("Recieved openai response", messageObject)
+      console.info("Parsed Feedback", messageObject)
+      console.timeLog("feedback")
 
       const parsedMessage = feedbackResponsePromptSchema.parse(messageObject)
+
+      console.info("Validated Message")
 
       await db.interview.update({
         where: {
@@ -177,11 +176,11 @@ export async function POST(
               },
             })),
           },
-          generatingFeedback: false,
         },
       })
 
-      console.info("Feedback generated")
+      console.info("Feedback updated")
+      console.timeLog("feedback")
 
       const result = await postmarkClient.sendEmailWithTemplate({
         TemplateId: parseInt(env.POSTMARK_FEEDBACK_SUCCESS_TEMPLATE),
@@ -197,21 +196,13 @@ export async function POST(
         },
       })
 
-      console.info("Feedback email sent")
+      console.info("Sent feedback email")
+      console.timeEnd("feedback")
 
       if (result.ErrorCode) {
         throw new Error(result.Message)
       }
     } catch (error) {
-      await db.interview.update({
-        where: {
-          id: interview.id,
-        },
-        data: {
-          generatingFeedback: false,
-        },
-      })
-
       const result = await postmarkClient.sendEmailWithTemplate({
         TemplateId: parseInt(env.POSTMARK_FEEDBACK_ERROR_TEMPLATE),
         To: user.email,

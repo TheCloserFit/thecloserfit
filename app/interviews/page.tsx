@@ -25,7 +25,6 @@ export default async function InterviewsPage() {
           id: true,
           updatedAt: true,
           feedback: true,
-          generatingFeedback: true,
           type: true,
           position: true,
           questions: {

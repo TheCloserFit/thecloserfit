@@ -12,14 +12,6 @@ interface InterviewResultProps {
 export default function InterviewResult({ interview }: InterviewResultProps) {
   return (
     <div>
-      {interview.generatingFeedback && (
-        <div className="mb-12 mt-8 flex flex-col items-center justify-center sm:flex-row">
-          <Icons.warning className="mr-2 text-primary" size={30} />
-          <h2 className="text-center font-heading text-2xl underline decoration-primary">
-            Generating feedback, check your email (~2 minutes) ...
-          </h2>
-        </div>
-      )}
       {interview.feedback && (
         <div className="flex gap-2">
           <Icons.info className="mt-2 w-16 text-primary" />

@@ -22,10 +22,7 @@ export function formatDate(input: string | number): string {
 }
 
 export function getInterviewSubtitle(
-  interview: Pick<
-    Interview,
-    "id" | "feedback" | "type" | "position" | "generatingFeedback"
-  > & {
+  interview: Pick<Interview, "id" | "feedback" | "type" | "position"> & {
     questions: Pick<Question, "id" | "answerAudio">[]
   }
 ) {
@@ -34,9 +31,7 @@ export function getInterviewSubtitle(
     (question) => !question.answerAudio
   )
   const type = interview.type[0].toUpperCase() + interview.type.slice(1)
-  const state = interview.generatingFeedback
-    ? "Generating Feedback"
-    : isIncomplete
+  const state = isIncomplete
     ? "Incomplete"
     : hasFeedback
     ? "Completed"

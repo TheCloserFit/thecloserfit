@@ -11,7 +11,7 @@ import { InterviewOperations } from "./interview-operations"
 interface InterviewItemProps {
   interview: Pick<
     Interview,
-    "id" | "type" | "position" | "updatedAt" | "feedback" | "generatingFeedback"
+    "id" | "type" | "position" | "updatedAt" | "feedback"
   > & {
     questions: Pick<
       Question,
@@ -33,8 +33,7 @@ export function InterviewItem({ interview }: InterviewItemProps) {
           href={`/interviews/${interview.id}`}
           className={cn("font-semibold hover:underline")}
         >
-          {(interview.generatingFeedback ||
-            (isCompleted && !interview.feedback)) && (
+          {isCompleted && !interview.feedback && (
             <Icons.ai className="mr-2 inline h-5 w-5 text-primary" />
           )}
           {formatDate(interview.updatedAt.toDateString())}
