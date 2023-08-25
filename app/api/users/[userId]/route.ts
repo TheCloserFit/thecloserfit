@@ -1,8 +1,10 @@
 import { getServerSession } from "next-auth/next"
+import { signOut } from "next-auth/react"
 import { z } from "zod"
 
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { getCurrentUser } from "@/lib/session"
 import { userNameSchema } from "@/lib/validations/user"
 
 const routeContextSchema = z.object({
@@ -44,6 +46,35 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 })
     }
+
+    return new Response(null, { status: 500 })
+  }
+}
+
+export async function DELETE(
+  _req: Request,
+  context: z.infer<typeof routeContextSchema>
+) {
+  try {
+    // Validate the route context.
+    const { params } = routeContextSchema.parse(context)
+
+    const user = await getCurrentUser()
+
+    if (user?.id !== params.userId) {
+      return new Response(null, { status: 403 })
+    }
+
+    // Delete the user.
+    await db.user.delete({
+      where: {
+        id: user.id,
+      },
+    })
+
+    return new Response(null, { status: 200 })
+  } catch (error) {
+    console.error(error)
 
     return new Response(null, { status: 500 })
   }

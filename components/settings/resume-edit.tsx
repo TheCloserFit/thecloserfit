@@ -3,19 +3,18 @@
 import { User } from "@prisma/client"
 import Balancer from "react-wrap-balancer"
 
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
-import { Icons } from "../icons"
-import { Button } from "../ui/button"
-import { DialogHeader } from "../ui/dialog"
-import { OnboardinFile } from "./file"
+import { Icons } from "@/components/icons"
+import { OnboardinFile } from "@/components/onboarding/file"
 
 interface ResumeEditProps {
   user: Pick<User, "resume">
