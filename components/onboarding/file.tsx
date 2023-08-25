@@ -12,7 +12,15 @@ import { Icons } from "@/components/icons"
 
 const MAX_RESUME_SIZE = 1024 * 1024 * 1 // 1MB
 
-export function OnboardinFile() {
+interface OnboardinFileProps extends React.HTMLAttributes<HTMLDivElement> {
+  redirect?: string
+}
+
+export function OnboardinFile({
+  className,
+  redirect,
+  ...props
+}: OnboardinFileProps) {
   const router = useRouter()
 
   const [loading, setLoading] = React.useState(false)
@@ -81,13 +89,21 @@ export function OnboardinFile() {
       return
     }
 
-    router.replace("/interviews")
+    if (redirect) {
+      router.replace(redirect)
+    }
+
+    router.refresh()
+
+    setFile(null)
 
     toast({
       title: "Success",
       description:
         "We have successfully recieved your resume. Welcome to thecloserfit!",
     })
+
+    setLoading(false)
   }
 
   return (
@@ -95,11 +111,13 @@ export function OnboardinFile() {
       {...getRootProps()}
       className={cn(
         "mx-auto flex h-72 w-full max-w-lg items-center justify-center rounded-lg border px-4",
-        !loading && "cursor-pointer"
+        !loading && "cursor-pointer",
+        className
       )}
+      {...props}
     >
       <input {...getInputProps()} disabled={loading} />
-      <div className="space-y-4">
+      <div className="max-w-lg space-y-4">
         {isDragActive ? (
           <p>Drop the resume here ...</p>
         ) : !!file ? (
@@ -125,7 +143,7 @@ export function OnboardinFile() {
           </div>
         ) : (
           <>
-            <Balancer className="text-center">
+            <Balancer className="text-center text-sm sm:text-base">
               Drag and drop your resume here, or click to select the resume to
               generate a personalized interview. We will not save your resume,
               we will only extract the text from it.

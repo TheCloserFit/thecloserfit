@@ -6,7 +6,7 @@ export default function OnboardingPage() {
       <h1 className="font-heading text-5xl underline decoration-primary md:text-6xl">
         Resume
       </h1>
-      <OnboardinFile />
+      <OnboardinFile redirect="/interviews" />
     </div>
   )
 }

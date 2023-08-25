@@ -7,6 +7,7 @@ import {
   ChevronsUp,
   ChevronsUpDown,
   Cpu,
+  Eye,
   Info,
   Laptop,
   Lightbulb,
@@ -48,6 +49,7 @@ export const Icons = {
   weakness: ChevronsDown,
   strength: ChevronsUp,
   hint: Lightbulb,
+  eye: Eye,
   ai: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
