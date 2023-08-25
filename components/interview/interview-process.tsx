@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import axios from "axios"
 import { Balancer } from "react-wrap-balancer"
 
@@ -23,6 +24,7 @@ export default function InterviewProcess({
   setLoading,
   onNextQuestion,
 }: InterviewProcessProps) {
+  const router = useRouter()
   const onStop = useCallback(
     async (file: File) => {
       try {
@@ -34,6 +36,7 @@ export default function InterviewProcess({
         onNextQuestion(key)
 
         if (isLast) {
+          router.refresh()
           toast({
             title: "Interview Finished",
             description: "Thank you for your time!",
@@ -48,7 +51,7 @@ export default function InterviewProcess({
         setLoading(false)
       }
     },
-    [isLast, onNextQuestion, setLoading]
+    [isLast, onNextQuestion, router, setLoading]
   )
 
   const { volume, isRecording, stopRecording, startRecording } =
