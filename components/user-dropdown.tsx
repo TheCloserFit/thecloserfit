@@ -43,7 +43,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
         <DropdownMenuItem asChild disabled>
           <Link href="/billing">Billing</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild disabled>
+        <DropdownMenuItem asChild>
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

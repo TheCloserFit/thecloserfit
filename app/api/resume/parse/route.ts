@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     const fileBuffer = Buffer.from(await file.arrayBuffer())
     const pdfData = await PDFParser(fileBuffer)
 
-    const fileText = pdfData.text // Extracted text from the PDF
+    const fileText = pdfData.text.trim() // Extracted text from the PDF
 
     const updatedUser = await db.user.update({
       where: { id: user.id },
