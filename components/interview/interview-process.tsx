@@ -102,9 +102,9 @@ InterviewProcess.Indications = function Indications({
       </Balancer>
       <div className="mt-2 flex items-center justify-center gap-2">
         <Icons.hint className="h-6 w-6 text-blue-300" />
-        <Balancer className="text-center">
+        <p className="textstart sm:text-center">
           Remember to keep your answer concise!
-        </Balancer>
+        </p>
       </div>
       <Button
         onClick={() => setShowIndications(false)}
