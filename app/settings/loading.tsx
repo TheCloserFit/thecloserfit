@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { InterviewsHeader } from "@/components/interviews-header"
+import { DeleteAccount } from "@/components/settings/delete-account"
+import { ResumeEdit } from "@/components/settings/resume-edit"
 import { UserNameForm } from "@/components/user-name-form"
 
 export const metadata = {
@@ -36,6 +38,8 @@ export default async function SettingsPage() {
       />
       <div className="grid gap-10">
         <UserNameForm user={{ id: user.id, name: user.name || "" }} />
+        <ResumeEdit />
+        <DeleteAccount userId={user.id} />
       </div>
     </div>
   )
