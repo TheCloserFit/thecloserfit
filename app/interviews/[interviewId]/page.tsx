@@ -30,7 +30,7 @@ export default async function SectionPage({ params }: InterviewPageProps) {
     include: {
       questions: {
         orderBy: {
-          createdAt: "asc",
+          updatedAt: "asc",
         },
       },
     },
