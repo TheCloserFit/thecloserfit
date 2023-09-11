@@ -3,6 +3,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
+import PrivacyButton from "@/components/iubenda/privacy"
+import TermsButton from "@/components/iubenda/terms"
 import { UserAuthForm } from "@/components/user/user-auth-form"
 
 export const metadata = {
@@ -36,21 +38,8 @@ export default function RegisterPage() {
           </div>
           <UserAuthForm />
           <p className="px-8 text-center text-sm text-muted-foreground">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="hover:text-brand underline underline-offset-4"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="hover:text-brand underline underline-offset-4"
-            >
-              Privacy Policy
-            </Link>
-            .
+            By clicking continue, you agree to our <TermsButton />
+            &nbsp; and <PrivacyButton />.
           </p>
         </div>
       </div>
