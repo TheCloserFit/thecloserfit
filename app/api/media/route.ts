@@ -28,6 +28,8 @@ export async function GET(_req: Request) {
 
     const uploadURL = await s3.getSignedUrlPromise("putObject", s3Params)
 
+    console.info("Got upload URL: ", uploadURL)
+
     return new Response(JSON.stringify({ uploadURL, key: Key }), {
       status: 200,
     })
