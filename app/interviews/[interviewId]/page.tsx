@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
@@ -19,6 +20,7 @@ export default async function SectionPage({ params }: InterviewPageProps) {
   const user = await getCurrentUser()
 
   if (!user) {
+    signOut()
     return notFound()
   }
 

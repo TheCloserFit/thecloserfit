@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
@@ -12,6 +13,7 @@ export default async function InterviewsPage() {
   const sessionUser = await getCurrentUser()
 
   if (!sessionUser) {
+    signOut()
     return notFound()
   }
 
@@ -45,6 +47,7 @@ export default async function InterviewsPage() {
   })
 
   if (!user || !user.resume) {
+    signOut()
     return notFound()
   }
 

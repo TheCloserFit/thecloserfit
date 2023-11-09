@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 import { getCurrentUser } from "@/lib/session"
 import { SiteFooter } from "@/components/site-footer"
@@ -13,6 +14,7 @@ export default async function OnboardingLayout({
   const user = await getCurrentUser()
 
   if (!user) {
+    signOut()
     return notFound()
   }
 
