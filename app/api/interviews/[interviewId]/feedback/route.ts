@@ -26,6 +26,8 @@ const routeContextSchema = z.object({
 
 export const revalidate = 0
 
+export const maxDuration = 500
+
 export async function POST(
   _req: Request,
   context: z.infer<typeof routeContextSchema>
