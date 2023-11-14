@@ -84,9 +84,10 @@ type PromptOutput = {
   feedback: string
 }
 Notes about the properties:
-- The questionId is the id of the question, and it is the same as the one provided in the input JSON.
-- strengths: the list of the strengths of this answer created by you. Provide a full a sentence and articulate why you gave such feeback providing examples.
-- weaknesses: the list of the weaknesses of this answer created by you. Provide a full sentence and articulate why you gave such feeback providing examples. Only give sentences providing the weakness (for example do NOT start with "however").
+- Inside the questionsFeedback, there is a list of the questionsFeedback. Make sure to name this property questionsFeedback, and NOT questionsAnswers. Each questionFeedback contains:
+  a. The questionId is the id of the question, and it is the same as the one provided in the input JSON.
+  b. strengths: the list of the strengths of this answer created by you. Provide a full a sentence and articulate why you gave such feeback providing examples.
+  c. weaknesses: the list of the weaknesses of this answer created by you. Provide a full sentence and articulate why you gave such feeback providing examples. Only give sentences providing the weakness (for example do NOT start with "however").
 - feedback: the overall feedback for the interview
 
 **[5] Key Performance Indicators (KPIs):**
