@@ -84,7 +84,7 @@ type PromptOutput = {
   feedback: string
 }
 Notes about the properties:
-- Inside the questionsFeedback, there is a list of the questionsFeedback. Make sure to name this property questionsFeedback, and NOT questionsAnswers. Each questionFeedback contains:
+- Inside the questionsFeedback property, there is a list of the questionsFeedback, one for each question, so there should be exactly 4 objects in this list (not more not less). Make sure to name this property questionsFeedback, and NOT questionsAnswers. Each questionFeedback contains:
   a. The questionId is the id of the question, and it is the same as the one provided in the input JSON.
   b. strengths: the list of the strengths of this answer created by you. Provide a full a sentence and articulate why you gave such feeback providing examples.
   c. weaknesses: the list of the weaknesses of this answer created by you. Provide a full sentence and articulate why you gave such feeback providing examples. Only give sentences providing the weakness (for example do NOT start with "however").
