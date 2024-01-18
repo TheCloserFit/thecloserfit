@@ -10,6 +10,8 @@ import {
   questionsResponsePromptSchema,
 } from "@/lib/validations/prompt"
 
+export const maxDuration = 300
+
 export async function POST(req: Request) {
   try {
     const sessionUser = await getCurrentUser()
