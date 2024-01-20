@@ -115,6 +115,7 @@ export async function POST(
         resume: user.resume,
         questionsAnswers: mappedQuestions,
         position: interview.position,
+        description: interview.description || undefined,
       }
 
       const parsedPromptRequest =

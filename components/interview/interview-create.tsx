@@ -141,7 +141,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
                   <FormLabel>Position</FormLabel>
                   <Input
                     id="name"
-                    placeholder="Stanford University Computer Science undergraduate"
+                    placeholder="Intesa San Paolo Junior Software Engineer"
                     size={32}
                     {...field}
                   />
@@ -160,20 +160,25 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
                   <FormLabel>Description</FormLabel>
                   <Textarea
                     id="description"
-                    placeholder="[Copied from Stanford's Website]: The optional interview provides an opportunity for Restrictive Early Action and Regular Decision applicants to have meaningful conversations with Stanford alumni. This two-way exchange allows you to learn more about Stanford while the Admission Office learns more about you. How should I prepare for my upcoming interview? The interview is meant to be an informal conversation, so no formal preparation is needed. There is no set list of questions that interviewers are required to ask, which allows for each interview to be a unique conversation.
-Prior to the interview, you may want to think about:
-Experiences and goals that you would like to share with your interviewer.
-Academic interests and extracurricular involvements.
-Questions to ask your interviewer, as this is an opportunity to learn more about Stanford. What is the role of the interviewer?
-Alumni volunteers learn about you through the interview and share information with the Office of Undergraduate Admission in a report that becomes part of your admission file.
-During the interview, alumni volunteers are able to share stories about their Stanford experience."
+                    placeholder="[From Datapizza.tech website] Intesa Sanpaolo is the right place for you if you are passionate about technology, have a proactive approach to problem solving, and want to work in an environment of continuous innovation.
+
+                    Technologies: PostgreSQL, MongoDB, C, C++, Java, REST API
+
+Key Responsibilities:
+
+🔹 Develop and innovate by creating internal products for the Bank.
+🔹 Create technical and performance tests with functional analysts.
+
+Intesa Sanpaolo offers the opportunity of a 4-day work week (4X9), comprehensive health care, and access to subsidized banking products and services.
+
+Background: Computer Science, Computer Engineering, STEM"
                     {...field}
                   />
                   <FormMessage />
                   <FormDescription>
-                    Optional: Specify the job position details here. Copy and
-                    paste the job description from the job posting. The more
-                    in-depth, the better.
+                    <span className="underline">Optional</span>: Specify the job
+                    position details here. Copy and paste the job description
+                    from the job posting. The more in-depth, the better.
                   </FormDescription>
                 </FormItem>
               )}

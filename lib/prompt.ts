@@ -67,11 +67,13 @@ type PromptInput = {
     answer: string
   }[]
   position: string
+  description: string | undefined
   resume: string
 }
 Notes about the properties:
 - type: the type of interview selected. If type is behavioural, the questions should be more behavioural and based on the experiences of the candidate. If type is "technical", the questions should be more about testing the candidate's knowledge of the theoretical concepts about the "position". If type is "mixed", it should contain a mix of the 2 types.
 - position: the job title of the position you want to test the candidate on. 
+- description: the in depth description of the position, to make you understand the values of the company, the required technologies etc. This description can be for example copied from the job posting.
 - resume: the text of the resume
 
 **[5] Your Output JSON Format:**
@@ -92,7 +94,7 @@ Notes about the properties:
 - feedback: the overall feedback for the interview. Give at least 3 weaknesses.
 
 **[5] Key Performance Indicators (KPIs):**
-1. **Adequacy**: The feedback must be adequate for the position the candidate is applying to and the type of the interview. The feedback should outline the discrepancies between the user profile, his responses and the position he is applying to (e.g. junior in the resume, but applying for a senior position).
+1. **Adequacy**: The feedback must be adequate for the position and description the candidate is applying to and the type of the interview. The feedback should outline the discrepancies between the user profile, his responses and the position he is applying to (e.g. junior in the resume, but applying for a senior position).
 2. **Honesty**: It should be a good hearted, yet honest feedback. Point out the errors and the strengths. For example if there is no response, or the responses are not related to the question, point it out.
 3. **Format**: The feedback should be respect the format provided in the section [5] (Your Output JSON format) at all costs. If the json it not well formatted or you do not provide the information as asked (eg. if you do not write the feedback or the strengths in the right place, or if the strength or weaknesses are not at least 3), there will be an error, so this is the most important KPI.
 `

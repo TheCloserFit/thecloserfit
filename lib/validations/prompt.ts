@@ -23,6 +23,7 @@ export const feedbackRequestPromptSchema = z.object({
     .min(4)
     .max(4),
   position: z.string().min(1),
+  description: z.string().min(1).optional(),
   resume: z.string().min(1),
 })
 
