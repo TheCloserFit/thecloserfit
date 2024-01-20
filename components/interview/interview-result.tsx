@@ -1,6 +1,5 @@
 import { Interview, Question } from "@prisma/client"
 
-import { Icons } from "../icons"
 import { QuestionItem } from "./question-item"
 
 interface InterviewResultProps {
@@ -11,18 +10,16 @@ interface InterviewResultProps {
 
 export default function InterviewResult({ interview }: InterviewResultProps) {
   return (
-    <div>
+    <div className="border-t">
       {interview.feedback && (
-        <div className="flex gap-2">
-          <Icons.info className="mt-2 w-16 text-primary" />
-          <h3 className="mb-4 text-sm italic sm:text-base">
-            {interview.feedback}
-          </h3>
+        <div className="my-4">
+          <h3 className="text-lg font-semibold sm:text-xl">Overall Feedback</h3>
+          <p className="text-sm italic sm:text-base">{interview.feedback}</p>
         </div>
       )}
       <div className="divide-y border-y">
-        {interview.questions.map((question) => (
-          <QuestionItem question={question} key={question.id} />
+        {interview.questions.map((question, i) => (
+          <QuestionItem question={question} i={i} key={question.id} />
         ))}
       </div>
     </div>
