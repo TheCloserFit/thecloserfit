@@ -32,8 +32,6 @@ export async function POST(
   _req: Request,
   context: z.infer<typeof routeContextSchema>
 ) {
-  console.time()
-
   try {
     const sessionUser = await getCurrentUser()
 
@@ -90,7 +88,6 @@ export async function POST(
 
     try {
       console.info("Transcribing answers")
-      console.timeLog()
       const mappedQuestions = await Promise.all(
         questions.map(async (question) => {
           if (!question.answerAudio) {
@@ -113,7 +110,6 @@ export async function POST(
         })
       )
       console.info("Transcribed answers")
-      console.timeLog()
 
       const promptRequest: z.infer<typeof feedbackRequestPromptSchema> = {
         resume: user.resume,
@@ -125,7 +121,6 @@ export async function POST(
         feedbackRequestPromptSchema.parse(promptRequest)
 
       console.info("Sending feedback prompt to openai")
-      console.timeLog()
 
       const response = await openai.createChatCompletion({
         model: "gpt-4",
@@ -143,7 +138,6 @@ export async function POST(
       })
 
       console.info("Generated feedback")
-      console.timeLog()
 
       const message = response.data.choices[0].message?.content
 
@@ -169,7 +163,6 @@ export async function POST(
       }
 
       console.info("Parsed Feedback", messageObject)
-      console.timeLog()
 
       const parsedMessage = feedbackResponsePromptSchema.parse(messageObject)
 
@@ -196,7 +189,6 @@ export async function POST(
       })
 
       console.info("Feedback updated")
-      console.timeLog()
 
       const result = await postmarkClient.sendEmailWithTemplate({
         TemplateId: parseInt(env.POSTMARK_FEEDBACK_SUCCESS_TEMPLATE),
@@ -213,7 +205,6 @@ export async function POST(
       })
 
       console.info("Sent feedback email")
-      console.timeEnd()
 
       if (result.ErrorCode) {
         throw new Error(result.Message)
