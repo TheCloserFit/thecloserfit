@@ -74,6 +74,9 @@ export default async function SectionPage({ params }: InterviewPageProps) {
           </div>
         )}
       </InterviewsHeader>
+      {interview.description && (
+        <div className="mb-2 -translate-y-2 px-2">{interview.description}</div>
+      )}
       <InterviewResult interview={interview} />
     </div>
   )
