@@ -3,6 +3,7 @@ import { z } from "zod"
 export const questionsRequestPromptSchema = z.object({
   type: z.enum(["behavioural", "technical", "mixed"]),
   position: z.string().min(1),
+  description: z.string().min(1).optional(),
   resume: z.string().min(1),
 })
 

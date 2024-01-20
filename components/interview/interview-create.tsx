@@ -40,6 +40,8 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
+import { Textarea } from "../ui/textarea"
+
 interface InterviewCreateProps extends ButtonProps {
   user?: User
 }
@@ -54,6 +56,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
     resolver: zodResolver(postInterviewSchema),
     defaultValues: {
       position: "",
+      description: undefined,
     },
   })
 
@@ -138,16 +141,40 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
                   <FormLabel>Position</FormLabel>
                   <Input
                     id="name"
-                    placeholder="Junior NextJS Developer for a startup"
+                    placeholder="Stanford University Computer Science undergraduate"
                     size={32}
                     {...field}
                   />
                   <FormDescription>
-                    The position you want to be interviewed for. You can also go
-                    in depth with the job position details (key values,
-                    technologies, etc.)
+                    The position you want to be interviewed for.
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    id="description"
+                    placeholder="[Copied from Stanford's Website]: The optional interview provides an opportunity for Restrictive Early Action and Regular Decision applicants to have meaningful conversations with Stanford alumni. This two-way exchange allows you to learn more about Stanford while the Admission Office learns more about you. How should I prepare for my upcoming interview? The interview is meant to be an informal conversation, so no formal preparation is needed. There is no set list of questions that interviewers are required to ask, which allows for each interview to be a unique conversation.
+Prior to the interview, you may want to think about:
+Experiences and goals that you would like to share with your interviewer.
+Academic interests and extracurricular involvements.
+Questions to ask your interviewer, as this is an opportunity to learn more about Stanford. What is the role of the interviewer?
+Alumni volunteers learn about you through the interview and share information with the Office of Undergraduate Admission in a report that becomes part of your admission file.
+During the interview, alumni volunteers are able to share stories about their Stanford experience."
+                    {...field}
+                  />
+                  <FormMessage />
+                  <FormDescription>
+                    Optional: Specify the job position details here. Copy and
+                    paste the job description from the job posting. The more
+                    in-depth, the better.
+                  </FormDescription>
                 </FormItem>
               )}
             />

@@ -16,11 +16,12 @@ The key "type" indicates the type of interview selected. If type is behavioural,
 If type is "technical", the questions should be more about testing the candidate's knowledge of the theoretical concepts about the "position"
 If type is "mixed", it should contain a mix of the 2 types.
 
-The resume contains the text of the resume. The position is the job title of the position you want to test the candidate about.
+The resume contains the text of the resume. The position is the job title of the position you want to test the candidate about. The description (which is optional) is the in depth description of the position, to make you understand the values of the company, the required technologies etc. This description can be for example copied from the job posting.
 
 type PromptInput = {
   type: "behavioural" | "technical" | "mixed"
   position: string
+  description: string | undefined
   resume: string
 }
 
@@ -35,7 +36,7 @@ Notes about the properties:
 **[6] Key Performance Indicators (KPIs):**
 1. **Quality**: The questions should be high quality, and should be able to be used in a real interview.
 2. **Relevance to the Resume**: Some questions must be focused on the candidate's resume.
-3. **Relevance to the Job Position and resume** The questions should be relevant to the position of the candidate, or the candidate's resume. If possible, they should be relevant both at the same time.
+3. **Relevance to the Job Position and Description and resume** The questions should be relevant to the position and description of the candidate, or the candidate's resume. If possible, they should be relevant both at the same time.
 4. **Handling unexpected input**: If the resume is not available, provide the questions as if the resume data is not available.
 5. **Format**: The questions should be respect the format provided in the output JSON format at all costs. If the json it not well formatted, there will be an error, so this is the most important KPI.
 6. **Uniqueness**: The questions should be unique, and not repeated.

@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     const promptRequest = {
       type: parsedBody.type,
       position: parsedBody.position,
+      description: parsedBody.description,
       resume: user.resume,
     }
 
@@ -72,6 +73,7 @@ export async function POST(req: Request) {
         userId: user.id,
         type: parsedBody.type,
         position: parsedBody.position,
+        description: parsedBody.description,
         questions: {
           create: parsedMessage.questions.map((question) => ({
             question,
