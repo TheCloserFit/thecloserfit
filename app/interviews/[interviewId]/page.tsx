@@ -74,6 +74,11 @@ export default async function SectionPage({ params }: InterviewPageProps) {
           </div>
         )}
       </InterviewsHeader>
+      {interview.description && (
+        <p className="mb-2 -translate-y-2 px-2 text-sm italic sm:text-base">
+          {interview.description}
+        </p>
+      )}
       <InterviewResult interview={interview} />
     </div>
   )

@@ -3,6 +3,7 @@ import { z } from "zod"
 export const postInterviewSchema = z.object({
   type: z.enum(["technical", "behavioural", "mixed"]),
   position: z.string().min(1),
+  description: z.string().min(1).optional(),
 })
 
 export const postInterviewAnswerSchema = z.object({

@@ -3,6 +3,7 @@ import { z } from "zod"
 export const questionsRequestPromptSchema = z.object({
   type: z.enum(["behavioural", "technical", "mixed"]),
   position: z.string().min(1),
+  description: z.string().min(1).optional(),
   resume: z.string().min(1),
 })
 
@@ -22,6 +23,7 @@ export const feedbackRequestPromptSchema = z.object({
     .min(4)
     .max(4),
   position: z.string().min(1),
+  description: z.string().min(1).optional(),
   resume: z.string().min(1),
 })
 
@@ -31,8 +33,8 @@ export const feedbackResponsePromptSchema = z.object({
     .array(
       z.object({
         questionId: z.string().min(1),
-        strengths: z.array(z.string()).min(3),
-        weaknesses: z.array(z.string()).min(3),
+        strengths: z.array(z.string()),
+        weaknesses: z.array(z.string()),
       })
     )
     .min(4)

@@ -15,10 +15,11 @@ import { Icons } from "@/components/icons"
 
 interface QuestionItemProps {
   question: Question
+  i: number
 }
 
-export function QuestionItem({ question }: QuestionItemProps) {
-  const [expanded, setExpanded] = useState(false)
+export function QuestionItem({ question, i }: QuestionItemProps) {
+  const [expanded, setExpanded] = useState(i === 0 ? true : false)
 
   return (
     <Collapsible open={expanded} onOpenChange={setExpanded}>

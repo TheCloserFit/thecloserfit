@@ -40,6 +40,8 @@ import {
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
+import { Textarea } from "../ui/textarea"
+
 interface InterviewCreateProps extends ButtonProps {
   user?: User
 }
@@ -54,6 +56,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
     resolver: zodResolver(postInterviewSchema),
     defaultValues: {
       position: "",
+      description: undefined,
     },
   })
 
@@ -138,16 +141,45 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
                   <FormLabel>Position</FormLabel>
                   <Input
                     id="name"
-                    placeholder="Junior NextJS Developer for a startup"
+                    placeholder="Intesa San Paolo Junior Software Engineer"
                     size={32}
                     {...field}
                   />
                   <FormDescription>
-                    The position you want to be interviewed for. You can also go
-                    in depth with the job position details (key values,
-                    technologies, etc.)
+                    The position you want to be interviewed for.
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    id="description"
+                    placeholder="[From Datapizza.tech website] Intesa Sanpaolo is the right place for you if you are passionate about technology, have a proactive approach to problem solving, and want to work in an environment of continuous innovation.
+
+                    Technologies: PostgreSQL, MongoDB, C, C++, Java, REST API
+
+Key Responsibilities:
+
+🔹 Develop and innovate by creating internal products for the Bank.
+🔹 Create technical and performance tests with functional analysts.
+
+Intesa Sanpaolo offers the opportunity of a 4-day work week (4X9), comprehensive health care, and access to subsidized banking products and services.
+
+Background: Computer Science, Computer Engineering, STEM"
+                    {...field}
+                  />
+                  <FormMessage />
+                  <FormDescription>
+                    <span className="underline">Optional</span>: Specify the job
+                    position details here. Copy and paste the job description
+                    from the job posting. The more in-depth, the better.
+                  </FormDescription>
                 </FormItem>
               )}
             />
