@@ -12,7 +12,7 @@ export const env = createEnv({
     GITHUB_ACCESS_TOKEN: z.string().min(1),
     DATABASE_URL: z.string().min(1),
     DIRECT_URL: z.string().min(1),
-    DIRECT_URL: z.string().min(1),
+    DIRECT_URL: z.string().min(1).optional(),
     SMTP_FROM: z.string().min(1),
     POSTMARK_API_TOKEN: z.string().min(1),
     POSTMARK_LOGIN_TEMPLATE: z.string().min(1),
