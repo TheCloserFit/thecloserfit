@@ -158,22 +158,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <Textarea
-                    id="description"
-                    placeholder="[From Datapizza.tech website] Intesa Sanpaolo is the right place for you if you are passionate about technology, have a proactive approach to problem solving, and want to work in an environment of continuous innovation.
-
-                    Technologies: PostgreSQL, MongoDB, C, C++, Java, REST API
-
-Key Responsibilities:
-
-🔹 Develop and innovate by creating internal products for the Bank.
-🔹 Create technical and performance tests with functional analysts.
-
-Intesa Sanpaolo offers the opportunity of a 4-day work week (4X9), comprehensive health care, and access to subsidized banking products and services.
-
-Background: Computer Science, Computer Engineering, STEM"
-                    {...field}
-                  />
+                  <Textarea id="description" {...field} />
                   <FormMessage />
                   <FormDescription>
                     <span className="underline">Optional</span>: Specify the job
