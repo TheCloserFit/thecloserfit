@@ -43,8 +43,9 @@ export async function POST(req: Request) {
     const parsedPromptRequest =
       questionsRequestPromptSchema.parse(promptRequest)
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4o-mini",
+    console.log("SENDING", parsedPromptRequest)
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -55,10 +56,12 @@ export async function POST(req: Request) {
           content: JSON.stringify(parsedPromptRequest),
         },
       ],
-      temperature: 0.99,
+      response_format: { type: "json_object" },
+      temperature: 1.2,
     })
 
-    const message = response.data.choices[0].message?.content
+    const message = response.choices[0].message?.content
+    console.log(message)
 
     if (!message)
       return new Response("No response from openai", {

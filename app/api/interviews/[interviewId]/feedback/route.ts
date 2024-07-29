@@ -123,8 +123,8 @@ export async function POST(
 
       console.info("Sending feedback prompt to openai")
 
-      const response = await openai.createChatCompletion({
-        model: "gpt-4o-mini",
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
         messages: [
           {
             role: "system",
@@ -135,12 +135,13 @@ export async function POST(
             content: JSON.stringify(parsedPromptRequest),
           },
         ],
-        temperature: 0.99,
+        response_format: { type: "json_object" },
+        temperature: 0.4,
       })
 
       console.info("Generated feedback")
 
-      const message = response.data.choices[0].message?.content
+      const message = response.choices[0].message?.content
 
       if (!message)
         throw new Error(
@@ -156,9 +157,9 @@ export async function POST(
           "OpenAI did not return a valid JSON message for the feedback prompt for the interview " +
             interview.id +
             ": " +
-            response.data,
+            response,
           {
-            cause: response.data,
+            cause: response,
           }
         )
       }
