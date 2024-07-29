@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       questionsRequestPromptSchema.parse(promptRequest)
 
     const response = await openai.createChatCompletion({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",

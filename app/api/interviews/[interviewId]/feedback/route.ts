@@ -124,7 +124,7 @@ export async function POST(
       console.info("Sending feedback prompt to openai")
 
       const response = await openai.createChatCompletion({
-        model: "gpt-4",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
