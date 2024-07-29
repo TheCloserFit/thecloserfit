@@ -43,7 +43,6 @@ export async function POST(req: Request) {
     const parsedPromptRequest =
       questionsRequestPromptSchema.parse(promptRequest)
 
-    console.log("SENDING", parsedPromptRequest)
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -61,7 +60,6 @@ export async function POST(req: Request) {
     })
 
     const message = response.choices[0].message?.content
-    console.log(message)
 
     if (!message)
       return new Response("No response from openai", {

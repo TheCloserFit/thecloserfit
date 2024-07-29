@@ -18,6 +18,10 @@ export default withAuth(
 
     if (isAuthPage) {
       if (isAuth) {
+        const from = req.nextUrl.searchParams.get("from")
+        if (from) {
+          return NextResponse.redirect(new URL(from, req.url))
+        }
         return NextResponse.redirect(new URL("/interviews", req.url))
       }
 
