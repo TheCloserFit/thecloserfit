@@ -17,8 +17,6 @@ export const env = createEnv({
     POSTMARK_API_TOKEN: z.string().min(1),
     POSTMARK_LOGIN_TEMPLATE: z.string().min(1),
     POSTMARK_REGISTER_TEMPLATE: z.string().min(1),
-    POSTMARK_FEEDBACK_SUCCESS_TEMPLATE: z.string().min(1),
-    POSTMARK_FEEDBACK_ERROR_TEMPLATE: z.string().min(1),
     OPENAI_API_KEY: z.string().min(1),
     ACCESS_KEY_ID_AWS: z.string().min(1),
     SECRET_ACCESS_KEY_AWS: z.string().min(1),

@@ -5,14 +5,11 @@ import { z } from "zod"
 
 import { env } from "@/env.mjs"
 import { AUDIO_TYPE } from "@/config/audio-type"
-import { siteConfig } from "@/config/site"
 import { verifyUserHasAccessToInterview } from "@/lib/access"
 import { db } from "@/lib/db"
-import { postmarkClient } from "@/lib/mail"
 import { openai } from "@/lib/openai"
 import { feedbackPrompt, whisperPrompt } from "@/lib/prompt"
 import { getCurrentUser } from "@/lib/session"
-import { absoluteUrl, formatDate } from "@/lib/utils"
 import {
   feedbackRequestPromptSchema,
   feedbackResponsePromptSchema,
@@ -191,46 +188,7 @@ export async function POST(
       })
 
       console.info("Feedback updated")
-
-      const result = await postmarkClient.sendEmailWithTemplate({
-        TemplateId: parseInt(env.POSTMARK_FEEDBACK_SUCCESS_TEMPLATE),
-        To: user.email,
-        From: env.SMTP_FROM,
-        TemplateModel: {
-          type: interview.type,
-          position: interview.position,
-          date: formatDate(interview.updatedAt.toDateString()),
-          interviewLink: absoluteUrl(`/interviews/${interview.id}`),
-          product_name: siteConfig.name,
-          contact_email: siteConfig.email,
-        },
-      })
-
-      console.info("Sent feedback email")
-
-      if (result.ErrorCode) {
-        throw new Error(result.Message)
-      }
     } catch (error) {
-      const result = await postmarkClient.sendEmailWithTemplate({
-        TemplateId: parseInt(env.POSTMARK_FEEDBACK_ERROR_TEMPLATE),
-        To: user.email,
-        From: env.SMTP_FROM,
-        TemplateModel: {
-          type: interview.type,
-          position: interview.position,
-          date: formatDate(interview.updatedAt.toDateString()),
-          interviewLink: absoluteUrl(`/interviews/${interview.id}`),
-          product_name: siteConfig.name,
-          contact_email: siteConfig.email,
-        },
-      })
-
-      if (result.ErrorCode) {
-        console.error(result)
-        throw new Error(result.Message)
-      }
-
       console.error(error.response)
 
       throw new Error(error)
