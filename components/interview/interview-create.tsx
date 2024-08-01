@@ -107,7 +107,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
     <Dialog defaultOpen={hasSearchParam}>
       <DialogTrigger asChild>
         <Button {...props}>
-          <Icons.add className="mr-2 h-4 w-4" />
+          <Icons.add className="mr-2 size-4" />
           New Interview
         </Button>
       </DialogTrigger>
