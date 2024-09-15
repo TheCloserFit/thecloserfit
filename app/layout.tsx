@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site"
 import { absoluteUrl, cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@/components/analytics"
+import CookiesBanner from "@/components/iubenda/cookies-banner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <BalancerProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+            <CookiesBanner />
             <Analytics />
             <Toaster />
             <TailwindIndicator />
