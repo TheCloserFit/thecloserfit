@@ -186,7 +186,7 @@ export function InterviewCreate({ user, ...props }: InterviewCreateProps) {
             <DialogFooter>
               <Button type="submit" className="mt-2">
                 {loading && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  <Icons.spinner className="mr-2 size-4 animate-spin" />
                 )}
                 Create Interview
               </Button>

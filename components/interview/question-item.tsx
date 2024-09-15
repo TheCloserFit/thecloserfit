@@ -46,7 +46,7 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
   const onSubmit = async (data: FormData) => {
     setLoading(true)
 
-    const res = await fetch(`/api/transcription/`, {
+    const res = await fetch(`/api/questions/${question.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -65,6 +65,7 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
     router.refresh()
 
     setLoading(false)
+    setEditing(false)
   }
 
   return (

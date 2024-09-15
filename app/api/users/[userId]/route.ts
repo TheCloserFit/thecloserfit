@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth/next"
-import { signOut } from "next-auth/react"
 import { z } from "zod"
 
 import { authOptions } from "@/lib/auth"
