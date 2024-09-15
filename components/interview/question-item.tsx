@@ -1,9 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Question } from "@prisma/client"
+import { useForm } from "react-hook-form"
 import { Balancer } from "react-wrap-balancer"
+import { z } from "zod"
 
+import { editTranscribedAnswerSchema } from "@/lib/validations/interview"
 import { Button } from "@/components/ui/button"
 import {
   Collapsible,
@@ -13,13 +18,54 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/icons"
 
+import { DialogFooter } from "../ui/dialog"
+import { Form, FormField, FormItem, FormMessage } from "../ui/form"
+import { Textarea } from "../ui/textarea"
+import { toast } from "../ui/use-toast"
+
 interface QuestionItemProps {
   question: Question
   i: number
 }
 
+type FormData = z.infer<typeof editTranscribedAnswerSchema>
+
 export function QuestionItem({ question, i }: QuestionItemProps) {
   const [expanded, setExpanded] = useState(i === 0 ? true : false)
+  const [editing, setEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(editTranscribedAnswerSchema),
+    defaultValues: {
+      transcribedAnswer: question.transcribedAnswer || "",
+    },
+  })
+
+  const onSubmit = async (data: FormData) => {
+    setLoading(true)
+
+    const res = await fetch(`/api/transcription/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (!res.ok) {
+      return toast({
+        title: "An error has occurred",
+        description: "Please try again later.",
+        variant: "destructive",
+      })
+    }
+
+    router.refresh()
+
+    setLoading(false)
+  }
 
   return (
     <Collapsible open={expanded} onOpenChange={setExpanded}>
@@ -36,18 +82,54 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
                 className="aspect-square h-6 p-0"
               >
                 {expanded ? (
-                  <Icons.collapse className="h-4 w-4" />
+                  <Icons.collapse className="size-4" />
                 ) : (
-                  <Icons.open className="h-4 w-4" />
+                  <Icons.open className="size-4" />
                 )}
               </Button>
             </CollapsibleTrigger>
           )}
         </div>
         <CollapsibleContent>
-          <div className="mb-1 flex flex-col py-2 text-sm text-muted-foreground sm:flex-row">
-            <p>{question.transcribedAnswer}</p>
-          </div>
+          {editing ? (
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-1 my-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="transcribedAnswer"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Textarea id="transcribedAnswer" {...field} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <DialogFooter>
+                  <Button type="submit" className="mt-2" size="sm">
+                    {loading && (
+                      <Icons.spinner className="mr-2 size-4 animate-spin" />
+                    )}
+                    Create Interview
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          ) : (
+            <div className="mb-1 py-2 text-sm text-muted-foreground flex items-center">
+              <p>{question.transcribedAnswer}</p>
+              <Button
+                variant="link"
+                size="icon"
+                className="m-0 p-0"
+                onClick={() => setEditing(true)}
+              >
+                <Icons.edit className="size-4 m-0 p-0" />
+              </Button>
+            </div>
+          )}
           <div className="flex flex-col gap-4 md:flex-row">
             {question.strengths.length > 0 && (
               <StrengthWeaknessItem
@@ -83,7 +165,7 @@ function StrengthWeaknessItem({
   return (
     <div className="flex-1 space-y-2 rounded border px-3 py-2">
       <div className="flex items-center">
-        <Icon className="mr-2 h-4 w-4 text-primary" />
+        <Icon className="mr-2 size-4 text-primary" />
         <h3 className="font-semibold">{title}</h3>
       </div>
       <ul className="space-y-1 text-sm">

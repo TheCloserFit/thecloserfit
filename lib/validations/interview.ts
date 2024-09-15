@@ -10,3 +10,7 @@ export const postInterviewAnswerSchema = z.object({
   questionId: z.string().min(1),
   answerAudio: z.string().min(1),
 })
+
+export const editTranscribedAnswerSchema = z.object({
+  transcribedAnswer: z.string().min(50),
+})
