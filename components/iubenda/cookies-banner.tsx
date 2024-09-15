@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { Icons } from "@/components/icons"
 
@@ -9,12 +9,19 @@ import CookieButton from "./cookie"
 import PrivacyButton from "./privacy"
 
 const CookiesBanner: React.FC = () => {
-  const [acceptedCookies, setAcceptedCookies] = useState<boolean>(
-    !!localStorage.getItem("cookiesAccepted")
-  )
+  const [acceptedCookies, setAcceptedCookies] = useState<boolean | null>(null)
   const [manageCookiesOpen, setManageCookiesOpen] = useState<boolean>(false)
   const [isOverlayActive, setIsOverlayActive] = useState<boolean>(true)
   const [declineCookiesOpen, setDeclineCookiesOpen] = useState<boolean>(false)
+
+  useEffect(() => {
+    const localStorageCookies = localStorage.getItem("cookiesAccepted")
+    setAcceptedCookies(!!localStorageCookies)
+  }, [])
+
+  if (acceptedCookies === null || acceptedCookies) {
+    return null
+  }
 
   const acceptAndCloseCookies = () => {
     localStorage.setItem("cookiesAccepted", "true")
