@@ -15,7 +15,9 @@ import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  isRegister?: boolean
+}
 
 type FormData = z.infer<typeof userAuthSchema>
 
@@ -85,7 +87,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            {props.isRegister ? "Register with Email" : "Sign In with Email"}
           </button>
         </div>
       </form>
