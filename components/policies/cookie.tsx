@@ -1,13 +1,13 @@
 import Link from "next/link"
 
-export default function PrivacyButton() {
+export default function CookieButton() {
   return (
     <>
       <Link
-        href="https://www.iubenda.com/privacy-policy/84472245"
+        href="/cookies"
         className="hover:text-brand underline underline-offset-4"
       >
-        Privacy Policy
+        Cookie Policy
       </Link>
     </>
   )

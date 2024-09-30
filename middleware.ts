@@ -14,7 +14,10 @@ export default withAuth(
     const isAuth = !!token
     const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register")
+      req.nextUrl.pathname.startsWith("/register") ||
+      req.nextUrl.pathname.startsWith("/privacy") ||
+      req.nextUrl.pathname.startsWith("/terms") ||
+      req.nextUrl.pathname.startsWith("/cookies")
 
     if (isAuthPage) {
       if (isAuth) {

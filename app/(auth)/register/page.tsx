@@ -3,8 +3,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
-import PrivacyButton from "@/components/iubenda/privacy"
-import TermsButton from "@/components/iubenda/terms"
+import PrivacyButton from "@/components/policies/privacy"
+import TermsButton from "@/components/policies/terms"
 import { UserAuthForm } from "@/components/user/user-auth-form"
 
 export const metadata = {

@@ -7,8 +7,8 @@ import { Icons } from "@/components/icons"
 import { ModeToggle } from "@/components/mode-toggle"
 import { UserDropdown } from "@/components/user-dropdown"
 
-import PrivacyButton from "./iubenda/privacy"
-import TermsButton from "./iubenda/terms"
+import PrivacyButton from "./policies/privacy"
+import TermsButton from "./policies/terms"
 
 interface SiteFooterProps extends React.HTMLAttributes<HTMLElement> {
   user?: Pick<User, "image" | "name" | "email">
