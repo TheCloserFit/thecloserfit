@@ -6,18 +6,20 @@ export default withAuth(
   async function middleware(req) {
     const token = await getToken({ req })
 
-    const isMarketingPage = req.nextUrl.pathname === "/"
-    if (isMarketingPage) {
+    const isAlwaysVisiblePage =
+      req.nextUrl.pathname === "/" ||
+      req.nextUrl.pathname.startsWith("/privacy") ||
+      req.nextUrl.pathname.startsWith("/terms") ||
+      req.nextUrl.pathname.startsWith("/cookies")
+
+    if (isAlwaysVisiblePage) {
       return null
     }
 
     const isAuth = !!token
     const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register") ||
-      req.nextUrl.pathname.startsWith("/privacy") ||
-      req.nextUrl.pathname.startsWith("/terms") ||
-      req.nextUrl.pathname.startsWith("/cookies")
+      req.nextUrl.pathname.startsWith("/register")
 
     if (isAuthPage) {
       if (isAuth) {
