@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Question } from "@prisma/client"
@@ -42,6 +42,12 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
       transcribedAnswer: question.transcribedAnswer || "",
     },
   })
+
+  useEffect(() => {
+    form.reset({
+      transcribedAnswer: question.transcribedAnswer || "",
+    })
+  }, [form, question.transcribedAnswer])
 
   const onSubmit = async (data: FormData) => {
     setLoading(true)
@@ -113,7 +119,7 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
                     {loading && (
                       <Icons.spinner className="mr-2 size-4 animate-spin" />
                     )}
-                    Create Interview
+                    Save
                   </Button>
                 </DialogFooter>
               </form>
