@@ -65,7 +65,9 @@ export default function InterviewProcessWrapper({
     <InterviewProcess
       question={currentQuestion.question}
       onNextQuestion={onNextQuestion}
+      length={4}
       loading={loading}
+      i={4 - interview.questions.length + 1}
       setLoading={setLoading}
       isLast={isLast}
     />

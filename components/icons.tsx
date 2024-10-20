@@ -14,6 +14,7 @@ import {
   Lightbulb,
   Loader2,
   LucideProps,
+  Mic,
   Moon,
   MoreVertical,
   Plus,
@@ -51,6 +52,7 @@ export const Icons = {
   weakness: ChevronsDown,
   strength: ChevronsUp,
   hint: Lightbulb,
+  microphone: Mic,
   eye: Eye,
   ai: ({ ...props }: LucideProps) => (
     <svg

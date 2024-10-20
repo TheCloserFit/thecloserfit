@@ -56,7 +56,7 @@ export default async function SectionPage({ params }: InterviewPageProps) {
         href="/interviews"
         className={cn(buttonVariants({ variant: "ghost" }), "mt-4")}
       >
-        <Icons.chevronLeft className="mr-2 h-4 w-4" />
+        <Icons.chevronLeft className="mr-2 size-4" />
         Back
       </Link>
       <InterviewsHeader

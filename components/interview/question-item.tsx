@@ -119,17 +119,21 @@ export function QuestionItem({ question, i }: QuestionItemProps) {
               </form>
             </Form>
           ) : (
-            <div className="mb-1 py-2 text-sm text-muted-foreground flex items-center">
-              <p>{question.transcribedAnswer}</p>
-              <Button
-                variant="link"
-                size="icon"
-                className="m-0 p-0"
-                onClick={() => setEditing(true)}
-              >
-                <Icons.edit className="size-4 m-0 p-0" />
-              </Button>
-            </div>
+            question.transcribedAnswer && (
+              <div className="mb-1 py-2 text-sm text-muted-foreground flex items-center">
+                <p>{question.transcribedAnswer}</p>
+                {
+                  <Button
+                    variant="link"
+                    size="icon"
+                    className="m-0 p-0"
+                    onClick={() => setEditing(true)}
+                  >
+                    <Icons.edit className="size-4 m-0 p-0" />
+                  </Button>
+                }
+              </div>
+            )
           )}
           <div className="flex flex-col gap-4 md:flex-row">
             {question.strengths.length > 0 && (
