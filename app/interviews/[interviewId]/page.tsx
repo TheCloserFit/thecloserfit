@@ -67,7 +67,10 @@ export default async function SectionPage({ params }: InterviewPageProps) {
       >
         {!interview.feedback && (
           <div className="flex flex-row-reverse justify-start gap-2 sm:flex-row sm:justify-end">
-            <InterviewGetFeedback interviewId={interview.id}>
+            <InterviewGetFeedback
+              interviewId={interview.id}
+              questions={interview.questions}
+            >
               Get feedback
             </InterviewGetFeedback>
             <UserDropdown user={user} />

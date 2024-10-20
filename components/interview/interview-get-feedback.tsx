@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { Question } from "@prisma/client"
 
 import { Icons } from "../icons"
 import { Button, ButtonProps } from "../ui/button"
@@ -9,15 +10,17 @@ import { toast } from "../ui/use-toast"
 
 interface InterviewGetFeedbackProps extends ButtonProps {
   interviewId: string
+  questions: Question[]
 }
 
 export function InterviewGetFeedback({
+  questions,
   interviewId,
 }: InterviewGetFeedbackProps) {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const getFeedback = async () => {
+  const getFeedback = useCallback(async () => {
     setLoading(true)
     toast({
       title: "Hold on...",
@@ -39,14 +42,19 @@ export function InterviewGetFeedback({
     }
 
     router.refresh()
-  }
+  }, [interviewId, router])
+
+  useEffect(() => {
+    if (!questions.every((question) => !!question.answerAudio)) return
+    getFeedback()
+  }, [getFeedback, questions])
 
   return (
     <Button onClick={getFeedback} disabled={loading}>
       {loading ? (
-        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        <Icons.spinner className="mr-2 size-4 animate-spin" />
       ) : (
-        <Icons.ai className="mr-2 h-4 w-4" />
+        <Icons.ai className="mr-2 size-4" />
       )}
       Get Feedback
     </Button>
