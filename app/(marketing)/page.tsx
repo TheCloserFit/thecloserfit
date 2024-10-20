@@ -12,8 +12,9 @@ export default async function IndexPage() {
             Prepare for your next interview
           </h1>
           <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            Get a personalized mock interview with an AI-powered interviewer and
-            get feedback on your performance.
+            Get personalized mock interviews with AI powered interviewers and
+            get feedback (in real-time) on your performance. get feedback on
+            your performance.
           </p>
           <Link href="/login" className={cn(buttonVariants({ size: "lg" }))}>
             Get Started

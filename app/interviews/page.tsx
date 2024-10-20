@@ -67,7 +67,8 @@ export default async function InterviewsPage() {
           <EmptyPlaceholder.Icon name="empty" />
           <EmptyPlaceholder.Title>No Interviews</EmptyPlaceholder.Title>
           <EmptyPlaceholder.Description>
-            You have no interviews yet. Higher the chances of getting hired now!
+            You have no interviews yet. Higher the chances of passing your next
+            interview by creating one.
           </EmptyPlaceholder.Description>
           <InterviewCreate user={user} variant="outline" />
         </EmptyPlaceholder>

@@ -100,7 +100,7 @@ export function OnboardinFile({
     toast({
       title: "Success",
       description:
-        "We have successfully recieved your resume. Welcome to thecloserfit!",
+        "We have successfully received your resume. Welcome to thecloserfit!",
     })
 
     setLoading(false)
